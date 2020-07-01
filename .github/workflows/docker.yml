@@ -1,0 +1,39 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Docker Build CI (test)
+
+on:
+  push:
+    branches: [ JohnSwag ]
+  pull_request:
+    branches: [ JohnSwag ]
+
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - uses: actions/checkout@v2
+    - name: docker login
+      env:
+         DOCKER_USER: ${{ secrets.DOCKER_USER }}   
+         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  
+      run: |
+         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+     - name: docker build saleor
+       run: |
+          docker build ./saleor -t saleor:tag   
+     - name: docker build saleor-dashboard
+       run: |
+          docker build ./saleor-dashboard -t saleor-dashboard:1.0.0
+     - name: docker build saleor-storefront
+       run: |
+          docker build ./saleor-storefront -t saleor-storefront:1.0.0         
+          
+     - name: docker push
+       run: |     
+          docker push saleor:tag
+          docker push saleor-dashboard:1.0.0  
+          docker push saleor-storefront:1.0.0
