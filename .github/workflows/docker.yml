@@ -20,6 +20,7 @@ jobs:
       with:
          DOCKER_USER: ${{ secrets.DOCKER_USER }}   
          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  
+         tags: latest
       run: |
          docker login -u $DOCKER_USER, -p $DOCKER_PASSWORD
      - name: docker build saleor
